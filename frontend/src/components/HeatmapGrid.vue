@@ -8,10 +8,10 @@ const props = defineProps<{
 }>();
 
 function color(count: number): string {
-  if (count === 0) return "#f2f4f7";
-  if (count <= 2) return "#d4edda";
-  if (count <= 5) return "#86d19a";
-  return "#2f9e44";
+  if (count === 0) return "#F0F4FF";
+  if (count <= 2) return "#C7E0FF";
+  if (count <= 5) return "#5BA3FF";
+  return "#003DA5";
 }
 
 const prettyState = computed(() => ({

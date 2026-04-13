@@ -160,7 +160,7 @@ onBeforeUnmount(() => {
               <td>{{ trip.state }}</td>
               <td>{{ trip.participants.length }}</td>
               <td class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-success" @click="onJoin(trip.id)">Unirme</button>
+                <button class="btn btn-sm btn-outline-primary" @click="onJoin(trip.id)">Unirme</button>
                 <button class="btn btn-sm btn-outline-secondary" @click="onLeave(trip.id)">Retirarme</button>
                 <button class="btn btn-sm btn-outline-primary" @click="onAdvanceState(trip)">Avanzar estado</button>
               </td>
