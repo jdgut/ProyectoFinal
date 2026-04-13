@@ -1,0 +1,32 @@
+@startuml
+title Ciclo de vida de desplazamiento
+
+actor Usuario
+actor Administrador
+participant Frontend
+participant Backend
+database PostgreSQL
+
+Usuario -> Frontend: Crear desplazamiento
+Frontend -> Backend: POST /api/trips
+Backend -> PostgreSQL: Insert trip + audit creado
+PostgreSQL --> Backend: OK
+Backend --> Frontend: Trip creado
+
+Usuario -> Frontend: Unirse/retirarse
+Frontend -> Backend: POST /join o /leave
+Backend -> PostgreSQL: Insert/Delete participante + audit
+
+Administrador -> Frontend: Cambiar estado
+Frontend -> Backend: POST /state
+Backend -> Backend: Validar transición y reglas temporales
+Backend -> PostgreSQL: Update estado + audit
+
+Frontend -> Backend: GET /trips/metrics/heatmap
+Backend -> Backend: Aplicar reglas automáticas
+Backend -> PostgreSQL: Query activos + agregación
+Backend --> Frontend: Métricas actuales
+
+Backend -> PostgreSQL: Archivo automático tras 2 horas
+
+@enduml

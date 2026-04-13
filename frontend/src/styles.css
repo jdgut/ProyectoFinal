@@ -1,0 +1,69 @@
+:root {
+  --brand-forest: #1f6f43;
+  --brand-cloud: #f5f8f6;
+  --brand-ink: #1f2937;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--brand-ink);
+  background: radial-gradient(circle at top right, #eaf6ee 0%, #f7f7f7 45%, #e8f0ff 100%);
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3 {
+  color: #113b26;
+}
+
+.hero {
+  background: linear-gradient(120deg, #0f5132, #3f9d62);
+  color: #f8fffb;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 14px 24px rgba(12, 36, 24, 0.2);
+  animation: reveal 500ms ease-out;
+}
+
+.heatmap-card {
+  background: var(--brand-cloud);
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 10px 20px rgba(51, 65, 85, 0.12);
+}
+
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.75rem;
+}
+
+.heat-cell {
+  border-radius: 0.8rem;
+  padding: 0.8rem;
+  min-height: 90px;
+}
+
+.heat-cell .state {
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.heat-cell .value {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+@keyframes reveal {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
