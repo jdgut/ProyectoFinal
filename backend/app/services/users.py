@@ -35,6 +35,20 @@ class UserService:
         digest = hashlib.sha256(f"{salt}{raw_password}".encode("utf-8")).hexdigest()
         return f"{salt}${digest}"
 
+    def _verify_password(self, raw_password: str, stored_hash: str) -> bool:
+        parts = stored_hash.split("$", 1)
+        if len(parts) != 2:
+            return False
+        salt, expected_digest = parts
+        calculated = hashlib.sha256(f"{salt}{raw_password}".encode("utf-8")).hexdigest()
+        return secrets.compare_digest(calculated, expected_digest)
+
+    def login(self, email: str, password: str) -> User:
+        user = self.user_repo.get_by_email(email)
+        if not user or not self._verify_password(password, user.password_hash):
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
+        return user
+
     def get_user_or_404(self, email: str) -> User:
         user = self.user_repo.get_by_email(email)
         if not user:

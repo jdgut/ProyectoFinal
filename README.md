@@ -91,6 +91,15 @@ Ambos servicios configuran cobertura mínima de 50%.
    - avanzar estado,
    - consultar métricas actuales.
 
+## Usuarios demo precargados
+
+Al iniciar el backend se siembran automáticamente 15 usuarios de prueba (si no existen), para facilitar la demostración académica:
+
+- Correos: `test1@eafit.edu.co` hasta `test15@eafit.edu.co`
+- Contraseña común: `testtest`
+
+La carga es idempotente: si los usuarios ya existen, no se duplican.
+
 ## Decisiones técnicas
 
 - Se priorizó simplicidad y legibilidad sobre complejidad de autenticación.

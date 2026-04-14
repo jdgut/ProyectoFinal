@@ -18,6 +18,11 @@ class UserRegisterRequest(BaseModel):
         return value
 
 
+class UserLoginRequest(BaseModel):
+    email: EmailStr
+    password: str = Field(min_length=8, max_length=128)
+
+
 class UserResponse(BaseModel):
     id: int
     email: EmailStr

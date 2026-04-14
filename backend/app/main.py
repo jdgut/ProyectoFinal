@@ -1,10 +1,15 @@
+import hashlib
+import secrets
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import select
 
 from app.api.trips import router as trip_router
 from app.api.users import router as user_router
 from app.core.config import settings
-from app.core.database import Base, engine
+from app.core.database import Base, SessionLocal, engine
+from app.models.domain import User, UserRole
 
 app = FastAPI(title=settings.app_name)
 
@@ -19,9 +24,38 @@ app.add_middleware(
 )
 
 
+def _hash_password(raw_password: str) -> str:
+    salt = secrets.token_hex(16)
+    digest = hashlib.sha256(f"{salt}{raw_password}".encode("utf-8")).hexdigest()
+    return f"{salt}${digest}"
+
+
+def seed_demo_users() -> None:
+    db = SessionLocal()
+    try:
+        for idx in range(1, 16):
+            email = f"test{idx}@eafit.edu.co"
+            exists = db.scalar(select(User.id).where(User.email == email))
+            if exists:
+                continue
+
+            db.add(
+                User(
+                    email=email,
+                    password_hash=_hash_password("testtest"),
+                    role=UserRole.USER,
+                )
+            )
+
+        db.commit()
+    finally:
+        db.close()
+
+
 @app.on_event("startup")
 def on_startup() -> None:
     Base.metadata.create_all(bind=engine)
+    seed_demo_users()
 
 
 @app.get("/health")

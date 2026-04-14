@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import HeatmapGrid from "../components/HeatmapGrid.vue";
-import { loadSimulatedHeatmap, registerUser } from "../services/api";
+import { loadSimulatedHeatmap, loginUser, registerUser } from "../services/api";
 import { saveUser } from "../stores/session";
 import type { Heatmap } from "../types";
 
@@ -12,6 +12,7 @@ const loading = ref(false);
 const error = ref("");
 const heatmaps = ref<Heatmap[]>([]);
 const showRegisterForm = ref(false);
+const authMode = ref<"login" | "register">("register");
 const form = ref({
   email: "",
   password: "",
@@ -40,11 +41,17 @@ async function submit() {
 
   loading.value = true;
   try {
-    const user = await registerUser(form.value.email, form.value.password, form.value.role);
+    const user =
+      authMode.value === "register"
+        ? await registerUser(form.value.email, form.value.password, form.value.role)
+        : await loginUser(form.value.email, form.value.password);
     saveUser(user);
     router.push("/dashboard");
   } catch {
-    error.value = "No fue posible registrar el usuario. Verifica que el correo sea único.";
+    error.value =
+      authMode.value === "register"
+        ? "No fue posible registrar el usuario. Verifica que el correo sea único."
+        : "No fue posible iniciar sesión. Verifica correo y contraseña.";
   } finally {
     loading.value = false;
   }
@@ -123,14 +130,33 @@ onMounted(loadHeatmaps);
           <div class="col-12 col-lg-4">
             <div class="card h-100">
               <div class="card-header">
-                <h5 class="mb-0">{{ showRegisterForm ? "Crear cuenta" : "Acceso a dashboard" }}</h5>
+                <h5 class="mb-0">{{ showRegisterForm ? (authMode === "register" ? "Crear cuenta" : "Iniciar sesión") : "Acceso a dashboard" }}</h5>
               </div>
               <div class="card-body d-flex flex-column">
                 <p class="text-muted mb-3" v-if="!showRegisterForm">
-                  Registrate con tu correo EAFIT para acceder al dashboard completo y gestionar desplazamientos.
+                  Inicia sesión con tu cuenta existente o regístrate para acceder al dashboard completo y gestionar desplazamientos.
                 </p>
 
                 <form v-if="showRegisterForm" class="d-grid gap-3" @submit.prevent="submit">
+                  <div class="d-flex gap-2">
+                    <button
+                      type="button"
+                      class="btn btn-sm"
+                      :class="authMode === 'login' ? 'btn-primary' : 'btn-outline-primary'"
+                      @click="authMode = 'login'"
+                    >
+                      Iniciar sesión
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-sm"
+                      :class="authMode === 'register' ? 'btn-primary' : 'btn-outline-primary'"
+                      @click="authMode = 'register'"
+                    >
+                      Registrarse
+                    </button>
+                  </div>
+
                   <div>
                     <label class="form-label">Correo EAFIT</label>
                     <input v-model="form.email" class="form-control" type="email" placeholder="tu.email@eafit.edu.co" required />
@@ -141,7 +167,7 @@ onMounted(loadHeatmaps);
                     <input v-model="form.password" class="form-control" type="password" placeholder="Mínimo 8 caracteres" minlength="8" required />
                   </div>
 
-                  <div>
+                  <div v-if="authMode === 'register'">
                     <label class="form-label">Rol de acceso</label>
                     <select v-model="form.role" class="form-select">
                       <option value="usuario">Estudiante/Usuario</option>
@@ -150,7 +176,7 @@ onMounted(loadHeatmaps);
                   </div>
 
                   <button class="btn btn-primary" :disabled="loading" type="submit">
-                    {{ loading ? "Registrando..." : "Crear cuenta" }}
+                    {{ loading ? (authMode === "register" ? "Registrando..." : "Ingresando...") : (authMode === "register" ? "Crear cuenta" : "Iniciar sesión") }}
                   </button>
 
                   <button type="button" class="btn btn-outline-secondary" @click="showRegisterForm = false">
@@ -161,7 +187,7 @@ onMounted(loadHeatmaps);
                 </form>
 
                 <button v-else class="btn btn-primary btn-lg mt-auto" @click="showRegisterForm = true">
-                  Registrarse ahora
+                  Acceder ahora
                 </button>
               </div>
             </div>

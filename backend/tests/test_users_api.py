@@ -27,6 +27,49 @@ def test_register_user_domain_error(client):
     assert response.status_code == 422
 
 
+def test_login_user_success(client):
+    client.post(
+        "/api/users/register",
+        json={
+            "email": "existente@eafit.edu.co",
+            "password": "password123",
+            "role": "usuario",
+        },
+    )
+
+    login_response = client.post(
+        "/api/users/login",
+        json={
+            "email": "existente@eafit.edu.co",
+            "password": "password123",
+        },
+    )
+
+    assert login_response.status_code == 200
+    assert login_response.json()["email"] == "existente@eafit.edu.co"
+
+
+def test_login_user_invalid_password(client):
+    client.post(
+        "/api/users/register",
+        json={
+            "email": "existente2@eafit.edu.co",
+            "password": "password123",
+            "role": "usuario",
+        },
+    )
+
+    login_response = client.post(
+        "/api/users/login",
+        json={
+            "email": "existente2@eafit.edu.co",
+            "password": "password999",
+        },
+    )
+
+    assert login_response.status_code == 401
+
+
 def test_cors_preflight_allows_frontend_origin(client):
     response = client.options(
         "/api/trips/metrics/heatmap/simulated",

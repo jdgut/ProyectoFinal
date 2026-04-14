@@ -10,6 +10,11 @@ export async function registerUser(email: string, password: string, role: "usuar
   return response.data;
 }
 
+export async function loginUser(email: string, password: string): Promise<User> {
+  const response = await api.post<User>("/users/login", { email, password });
+  return response.data;
+}
+
 export async function listTrips(): Promise<Trip[]> {
   const response = await api.get<Trip[]>("/trips");
   return response.data;
