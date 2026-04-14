@@ -16,6 +16,7 @@ Servicio responsable de reglas de negocio, auditoría y agregación de métricas
 - `APP_APP_ENV`: `dev` o `prod`.
 - `APP_APP_HOST`: host de arranque.
 - `APP_APP_PORT`: puerto de arranque.
+- `APP_CORS_ALLOWED_ORIGINS`: orígenes permitidos para frontend local.
 - `APP_DATABASE_URL`: cadena de conexión SQLAlchemy.
 
 ## Ejecución local sin Docker

@@ -45,6 +45,21 @@ Arquitectura orientada a servicios desacoplados y orquestados con Docker Compose
    - Backend: `http://localhost:8000/docs`
    - PostgreSQL: `localhost:5432`
 
+### Ajuste CORS (Frontend <-> Backend)
+
+Para evitar errores del navegador como `Cross-Origin Request Blocked` al consumir la API desde el frontend, el backend incluye configuración CORS por variable de entorno:
+
+- `APP_CORS_ALLOWED_ORIGINS`
+
+Valor recomendado en desarrollo local:
+
+- `http://localhost:5173,http://127.0.0.1:5173,http://localhost:8080,http://127.0.0.1:8080`
+
+Si modificas esta variable con contenedores ya levantados, reconstruye y reinicia para aplicar el cambio:
+
+- `docker compose down`
+- `docker compose up --build`
+
 ## Modo producción local
 
 - `docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build`
