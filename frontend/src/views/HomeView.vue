@@ -186,7 +186,7 @@ onMounted(loadHeatmaps);
                   <p v-if="error" class="text-danger mb-0 small">{{ error }}</p>
                 </form>
 
-                <button v-else class="btn btn-primary btn-lg mt-auto" @click="showRegisterForm = true">
+                <button v-else class="btn btn-primary btn-lg mt-auto" @click="authMode = 'login'; showRegisterForm = true">
                   Acceder ahora
                 </button>
               </div>

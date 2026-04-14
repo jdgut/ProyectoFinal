@@ -14,6 +14,12 @@ function color(count: number): string {
   return "#003DA5";
 }
 
+function textColor(count: number): string {
+  // En celdas de azul medio/oscuro usamos texto blanco para mantener contraste.
+  if (count >= 3) return "#FFFFFF";
+  return "#1F2937";
+}
+
 const prettyState = computed(() => ({
   en_metro: "En el metro",
   en_desplazamiento_universidad: "En desplazamiento a la Universidad",
@@ -26,7 +32,12 @@ const prettyState = computed(() => ({
   <section class="heatmap-card">
     <h3>{{ title }}</h3>
     <div class="heatmap-grid">
-      <article v-for="cell in map.cells" :key="cell.state" class="heat-cell" :style="{ backgroundColor: color(cell.count) }">
+      <article
+        v-for="cell in map.cells"
+        :key="cell.state"
+        class="heat-cell"
+        :style="{ backgroundColor: color(cell.count), color: textColor(cell.count) }"
+      >
         <p class="state">{{ prettyState[cell.state] }}</p>
         <p class="value">{{ cell.count }} grupos</p>
       </article>

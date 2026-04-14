@@ -103,11 +103,13 @@ h3 {
 .btn-primary {
   background-color: var(--brand-primary);
   border-color: var(--brand-primary);
+  color: #FFFFFF;
 }
 
 .btn-primary:hover {
   background-color: var(--brand-secondary);
   border-color: var(--brand-secondary);
+  color: #FFFFFF;
 }
 
 .btn-outline-primary {
@@ -118,6 +120,11 @@ h3 {
 .btn-outline-primary:hover {
   background-color: var(--brand-primary);
   border-color: var(--brand-primary);
+  color: #FFFFFF;
+}
+
+.text-on-dark-blue {
+  color: #FFFFFF !important;
 }
 
 /* Tarjetas de información */
