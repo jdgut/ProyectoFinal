@@ -72,9 +72,14 @@
 
 tests/test_api_health.py
 - api/health [GET]
+    - ok
 
 tests/test_users_api.py
 - api/users/registrar [POST]
+    - prueba positiva, ok
+    - prueba negativa con dominio, ok
+    - prueba negativa con usuario existente, ok
+
 - api/users/login [POST]
 
 tests/test_trips_api.py

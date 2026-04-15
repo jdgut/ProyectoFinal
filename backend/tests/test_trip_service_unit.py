@@ -29,8 +29,8 @@ def test_change_state_backward_requires_new_date(db_session):
     user_service.register(
         UserRegisterRequest(email="unitario@eafit.edu.co", password="password123", role="usuario")
     )
-    service = TripService(db_session)
-    trip = service.create_trip(
+    trip_service = TripService(db_session)
+    trip = trip_service.create_trip(
         actor_email="unitario@eafit.edu.co",
         title="Prueba",
         meeting_point="Puerta 1",
@@ -39,7 +39,7 @@ def test_change_state_backward_requires_new_date(db_session):
         direction=TripDirection.METRO_TO_UNIVERSITY,
     )
 
-    service.change_state(trip.id, "unitario@eafit.edu.co", TripState.TO_UNIVERSITY, None)
+    trip_service.change_state(trip.id, "unitario@eafit.edu.co", TripState.TO_UNIVERSITY, None)
 
     with pytest.raises(HTTPException):
-        service.change_state(trip.id, "unitario@eafit.edu.co", TripState.IN_METRO, None)
+        trip_service.change_state(trip.id, "unitario@eafit.edu.co", TripState.IN_METRO, None)

@@ -26,6 +26,31 @@ def test_register_user_domain_error(client):
 
     assert response.status_code == 422
 
+def test_register_user_exists_error(client):
+    # crear el usuario por primera vez
+    response = client.post(
+        "/api/users/register",
+        json={
+            "email": "prueba_existe@eafit.edu.co",
+            "password": "password123",
+            "role": "usuario",
+        },
+    )
+    # validar que se creó correctamente
+    assert response.status_code == 200
+    
+    # intentar crear el mismo usuario nuevamente
+    response = client.post(
+        "/api/users/register",
+        json={
+            "email": "prueba_existe@eafit.edu.co",
+            "password": "password123",
+            "role": "usuario",
+        },
+    )
+    # validar que se recibió un error de conflicto por usuario existente
+    assert response.status_code == 409
+
 
 def test_login_user_success(client):
     client.post(
