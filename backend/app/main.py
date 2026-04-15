@@ -1,5 +1,6 @@
 import hashlib
 import secrets
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,17 +12,7 @@ from app.core.config import settings
 from app.core.database import Base, SessionLocal, engine
 from app.models.domain import User, UserRole
 
-app = FastAPI(title=settings.app_name)
-
 allowed_origins = [origin.strip() for origin in settings.cors_allowed_origins.split(",") if origin.strip()]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=allowed_origins,
-    allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 
 def _hash_password(raw_password: str) -> str:
@@ -52,10 +43,21 @@ def seed_demo_users() -> None:
         db.close()
 
 
-@app.on_event("startup")
-def on_startup() -> None:
+@asynccontextmanager
+async def lifespan(_: FastAPI):
     Base.metadata.create_all(bind=engine)
     seed_demo_users()
+    yield
+
+app = FastAPI(title=settings.app_name, lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/health")
