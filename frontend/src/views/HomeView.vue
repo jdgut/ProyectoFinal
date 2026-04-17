@@ -66,7 +66,7 @@ onMounted(loadHeatmaps);
     <section class="hero-section">
       <div class="container">
         <header class="hero">
-          <h1>Movilidad colaborativa EAFIT</h1>
+          <h1 data-testid="home-title">Movilidad colaborativa EAFIT</h1>
           <p class="hero-subtitle">Coordina desplazamientos entre metro y universidad de manera inteligente y transparente</p>
         </header>
       </div>
