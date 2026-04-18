@@ -1,0 +1,3 @@
+[flake8]
+# Black's default line length is 88, Flake8's is 79.
+max-line-length = 150
